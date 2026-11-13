@@ -2,148 +2,551 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KIVILCIM</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{margin:0;background:#101010;color:white;font-family:Arial,sans-serif}
-    header{padding:20px;background:#191919;border-bottom:1px solid #333}
-    header h1{margin:0;color:#ff6a00}
-    main{max-width:650px;margin:25px auto;padding:15px}
-    .card{background:#1c1c1c;border:1px solid #333;border-radius:15px;padding:18px;margin-bottom:16px}
-    input,textarea{width:100%;padding:13px;margin:7px 0;background:#292929;color:white;border:1px solid #444;border-radius:9px}
-    button{background:#ff6a00;color:white;border:0;border-radius:9px;padding:12px 17px;font-weight:bold;cursor:pointer;margin:5px 3px 5px 0}
-    .secondary{background:#444}
-    .muted{color:#aaa;font-size:13px}
-    .post{border-bottom:1px solid #444;padding:12px 0}
-    #app{display:none}
-    #status{color:#ffb27c}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIVILCIM</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --bg:#080912;
+  --panel:#111326;
+  --panel2:#191b36;
+  --purple:#9b5cff;
+  --blue:#398bff;
+  --text:#f5f3ff;
+  --muted:#aaaac4;
+  --border:#292b4b;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#19133c 0%,var(--bg) 55%);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+}
+header {
+  padding:22px 18px;
+  text-align:center;
+  background:#0b0c19;
+  border-bottom:1px solid var(--border);
+}
+.logo {
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:4px;
+  background:linear-gradient(90deg,#bd78ff,#479dff);
+  color:transparent;
+  background-clip:text;
+}
+header p {color:var(--muted);margin:7px 0 0}
+main {max-width:850px;margin:auto;padding:18px}
+.card {
+  background:linear-gradient(145deg,#17172e,#101323);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 8px 25px #0005;
+}
+h2 {margin-top:0}
+h3 {margin-top:0}
+input,textarea {
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:#0b0d1b;
+  color:white;
+  font-size:15px;
+}
+textarea {min-height:90px;resize:vertical}
+button {
+  border:0;
+  border-radius:11px;
+  padding:12px 16px;
+  color:white;
+  font-weight:bold;
+  background:linear-gradient(100deg,var(--purple),var(--blue));
+  cursor:pointer;
+  margin:4px 2px;
+}
+button:active {transform:scale(.97)}
+button.secondary {background:#292b49}
+button.danger {background:#74344f}
+.hidden {display:none!important}
+.muted {color:var(--muted);font-size:13px}
+#message {color:#c9aaff;margin:10px 0}
+nav {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:18px 0;
+}
+nav button {
+  min-height:58px;
+  background:#17182e;
+  border:1px solid var(--border);
+  font-size:13px;
+}
+nav button.active {
+  background:linear-gradient(110deg,#763bd2,#2869cf);
+  border-color:#a77aff;
+}
+.page {display:none}
+.page.active {display:block}
+.big-number {
+  font-size:38px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#bd78ff,#479dff);
+  color:transparent;
+  background-clip:text;
+  margin:12px 0;
+}
+.post {
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:13px;
+  margin-top:12px;
+  background:#0c0e1c;
+}
+.post small {color:var(--muted)}
+.ai-bubble {
+  background:#1b1b38;
+  border-radius:14px;
+  padding:13px;
+  margin:10px 0;
+  line-height:1.5;
+}
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:25px;
+  font-size:12px;
+}
+</style>
 </head>
+
 <body>
+
 <header>
-  <h1>🔥 KIVILCIM</h1>
-  <p class="muted">Fikirlerini paylaş, topluluğa katıl.</p>
+  <div class="logo">✦ KIVILCIM</div>
+  <p>Birlikte öğren, paylaş ve geliş!</p>
 </header>
+
 <main>
-  <section id="auth" class="card">
-    <h2>Hesabına giriş yap</h2>
-    <input id="email" type="email" placeholder="E-posta adresin">
-    <input id="password" type="password" placeholder="Şifren">
-    <button onclick="signIn()">Giriş yap</button>
-    <button class="secondary" onclick="signUp()">Hesap oluştur</button>
-    <p class="muted">Kayıt sonrası e-posta doğrulaması gerekebilir.</p>
+
+<!-- GİRİŞ -->
+<section id="auth" class="card">
+  <h2>✨ KIVILCIM'a Hoş Geldin</h2>
+  <p class="muted">Hesabına giriş yap veya yeni hesap oluştur.</p>
+  <input id="email" type="email" placeholder="E-posta adresin">
+  <input id="password" type="password" placeholder="Şifren">
+  <button onclick="signup()">Kayıt Ol</button>
+  <button onclick="login()">Giriş Yap</button>
+  <p id="message"></p>
+  <p class="muted">Kayıt sonrası e-posta doğrulaması istenebilir.</p>
+</section>
+
+<!-- UYGULAMA -->
+<section id="app" class="hidden">
+  <div class="card">
+    <h2>Merhaba! 🌙</h2>
+    <p class="muted" id="userEmail"></p>
+    <button class="secondary" onclick="logout()">Çıkış Yap</button>
+  </div>
+
+  <nav>
+    <button class="active" onclick="showPage('community',this)">👥 Topluluk</button>
+    <button onclick="showPage('food',this)">🍎 Yemek</button>
+    <button onclick="showPage('steps',this)">👣 Adım</button>
+    <button onclick="showPage('water',this)">💧 Su</button>
+    <button onclick="showPage('plants',this)">🌱 Bitkiler</button>
+    <button onclick="showPage('habits',this)">📅 Alışkanlıklar</button>
+    <button onclick="showPage('ai',this)">✨ KIVILCIM AI</button>
+  </nav>
+
+  <!-- TOPLULUK -->
+  <section id="community" class="page active">
+    <div class="card">
+      <h2>👥 Topluluk</h2>
+      <p class="muted">Fikirlerini ve güzel anlarını paylaş!</p>
+      <input id="postTitle" placeholder="Gönderi başlığı">
+      <textarea id="postContent" placeholder="Neler paylaşmak istersin?"></textarea>
+      <button onclick="createPost()">Paylaş 🚀</button>
+      <p id="postMessage" class="muted"></p>
+    </div>
+    <div class="card">
+      <h3>🌟 Son Gönderiler</h3>
+      <div id="posts">Gönderiler yükleniyor...</div>
+    </div>
   </section>
 
-  <section id="app">
+  <!-- YEMEK -->
+  <section id="food" class="page">
     <div class="card">
-      <h2>Yeni gönderi</h2>
-      <input id="postTitle" maxlength="100" placeholder="Gönderi başlığı">
-      <textarea id="postContent" maxlength="2000" rows="4" placeholder="Ne paylaşmak istiyorsun?"></textarea>
-      <button onclick="createPost()">Paylaş</button>
-      <button class="secondary" onclick="signOut()">Çıkış yap</button>
-      <p id="status"></p>
-    </div>
-    <div class="card">
-      <h2>Topluluk gönderileri</h2>
-      <div id="posts">Yükleniyor...</div>
+      <h2>🍎 Yemek Günlüğüm</h2>
+      <p class="muted">Gün içinde yediklerini veya denediğin tarifleri not et.</p>
+      <input id="foodName" placeholder="Yemek veya tarif adı">
+      <textarea id="foodNote" placeholder="Tarif, malzemeler veya düşüncelerin..."></textarea>
+      <button onclick="saveFood()">Not Ekle</button>
+      <div id="foodList"></div>
     </div>
   </section>
+
+  <!-- ADIM -->
+  <section id="steps" class="page">
+    <div class="card">
+      <h2>👣 Adım Sayacım</h2>
+      <p class="muted">Attığın adımları kendin kaydedebilirsin.</p>
+      <div class="big-number" id="stepCount">0</div>
+      <button onclick="changeSteps(100)">+100 adım</button>
+      <button onclick="changeSteps(500)">+500 adım</button>
+      <button class="secondary" onclick="changeSteps(-100)">-100</button>
+      <p class="muted">Bu sayaç manuel kayıt tutar; telefonun adımlarını otomatik ölçmez.</p>
+    </div>
+  </section>
+
+  <!-- SU -->
+  <section id="water" class="page">
+    <div class="card">
+      <h2>💧 Su Takibim</h2>
+      <p class="muted">İçtiğin su miktarını kaydet.</p>
+      <div class="big-number"><span id="waterCount">0</span> ml</div>
+      <button onclick="changeWater(250)">+250 ml</button>
+      <button onclick="changeWater(500)">+500 ml</button>
+      <button class="secondary" onclick="changeWater(-250)">-250 ml</button>
+    </div>
+  </section>
+
+  <!-- BİTKİLER -->
+  <section id="plants" class="page">
+    <div class="card">
+      <h2>🌱 Bitki Bakımım</h2>
+      <input id="plantName" placeholder="Bitkinin adı">
+      <input id="plantNote" placeholder="Bakım notu (ör. sulandı)">
+      <button onclick="savePlant()">Bitki Ekle</button>
+      <div id="plantList"></div>
+    </div>
+  </section>
+
+  <!-- ALIŞKANLIKLAR -->
+  <section id="habits" class="page">
+    <div class="card">
+      <h2>📅 Alışkanlıklarım</h2>
+      <input id="habitName" placeholder="Yeni alışkanlık">
+      <button onclick="addHabit()">Ekle</button>
+      <div id="habitList"></div>
+    </div>
+  </section>
+
+  <!-- AI -->
+  <section id="ai" class="page">
+    <div class="card">
+      <h2>✨ KIVILCIM AI</h2>
+      <p class="muted">Sorularını sor, fikirlerini geliştir ve yeni şeyler öğren!</p>
+      <div id="chat">
+        <div class="ai-bubble">
+          Merhaba! Ben KIVILCIM AI. 🌟 Sana nasıl yardımcı olabilirim?
+        </div>
+      </div>
+      <textarea id="aiInput" placeholder="Mesajını yaz..."></textarea>
+      <button onclick="sendAI()">Gönder ✨</button>
+      <p class="muted" id="aiStatus">
+        Yapay zekâ bağlantısı henüz kurulmadı.
+      </p>
+    </div>
+  </section>
+</section>
 </main>
 
+<footer>✦ KIVILCIM · Hayallerine kıvılcım ol ✦</footer>
+
 <script>
-  const SUPABASE_URL = "https://uctzwuvfduwxxlppstfx.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_8HbldJQrYyT8yOTw2ZIQ_g_l7uVpus1";
+// SUPABASE BAĞLANTISI
+const SUPABASE_URL = "https://uctzwuvfduwxxlppstfx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_8HbldJQrYyT8yOTw2ZIQ_g_l7uVpus1";
 
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const authPanel = document.getElementById("auth");
-  const appPanel = document.getElementById("app");
-  const statusBox = document.getElementById("status");
+const $ = id => document.getElementById(id);
 
-  function message(text){statusBox.textContent=text;}
+function say(text) {
+  $("message").textContent = text;
+}
 
-  function escapeHTML(value){
-    return String(value ?? "").replace(/[&<>"']/g,c=>({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[c]));
-  }
+async function signup() {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || !password) return say("E-posta ve şifreni yaz.");
+  if (password.length < 6) return say("Şifre en az 6 karakter olmalı.");
 
-  async function signUp(){
-    const email=document.getElementById("email").value.trim();
-    const password=document.getElementById("password").value;
-    if(!email||password.length<8)return alert("E-posta gir ve en az 8 karakterli şifre kullan.");
-    const {error}=await db.auth.signUp({email,password});
-    if(error)return alert(error.message);
-    alert("Kayıt isteğin alındı. E-posta doğrulaması gerekiyorsa gelen kutunu kontrol et.");
-    await checkSession();
-  }
-
-  async function signIn(){
-    const email=document.getElementById("email").value.trim();
-    const password=document.getElementById("password").value;
-    const {error}=await db.auth.signInWithPassword({email,password});
-    if(error)return alert(error.message);
-    await checkSession();
-  }
-
-  async function signOut(){
-    const {error}=await db.auth.signOut();
-    if(error)return alert(error.message);
-    await checkSession();
-  }
-
-  async function checkSession(){
-    const {data,error}=await db.auth.getSession();
-    if(error)return alert(error.message);
-    const loggedIn=!!data.session;
-    authPanel.style.display=loggedIn?"none":"block";
-    appPanel.style.display=loggedIn?"block":"none";
-    if(loggedIn)await loadPosts();
-  }
-
-  async function createPost(){
-    const title=document.getElementById("postTitle").value.trim();
-    const content=document.getElementById("postContent").value.trim();
-    if(!title||!content)return message("Başlık ve içerik boş bırakılamaz.");
-    const {data:{user}}=await db.auth.getUser();
-    if(!user)return message("Önce giriş yapmalısın.");
-    const {error}=await db.from("posts").insert({user_id:user.id,title,content});
-    if(error)return message("Hata: "+error.message);
-    document.getElementById("postTitle").value="";
-    document.getElementById("postContent").value="";
-    message("Gönderin paylaşıldı!");
-    await loadPosts();
-  }
-
-  async function loadPosts(){
-    const container=document.getElementById("posts");
-    container.textContent="Gönderiler yükleniyor...";
-    const {data,error}=await db.from("posts")
-      .select("id,title,content,created_at")
-      .order("created_at",{ascending:false});
-    if(error)return container.textContent="Hata: "+error.message;
-    container.innerHTML="";
-    if(!data||data.length===0){
-      container.textContent="Henüz gönderi yok!";
-      return;
+  const {error} = await db.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: "https://pars9558-tech.github.io/kivilcim/"
     }
-    data.forEach(post=>{
-      const article=document.createElement("article");
-      article.className="post";
-      article.innerHTML=`
-        <h3>${escapeHTML(post.title)}</h3>
-        <p>${escapeHTML(post.content).replace(/\n/g,"<br>")}</p>
-        <small class="muted">${escapeHTML(new Date(post.created_at).toLocaleString("tr-TR"))}</small>
-      `;
-      container.appendChild(article);
-    });
+  });
+
+  say(error ? error.message : "Kayıt isteği gönderildi! E-postanı kontrol et.");
+}
+
+async function login() {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || !password) return say("E-posta ve şifreni yaz.");
+
+  const {error} = await db.auth.signInWithPassword({email,password});
+  say(error ? error.message : "Giriş yapıldı!");
+  if (!error) await checkUser();
+}
+
+async function logout() {
+  await db.auth.signOut();
+  $("app").classList.add("hidden");
+  $("auth").classList.remove("hidden");
+}
+
+async function checkUser() {
+  const {data} = await db.auth.getSession();
+  const user = data.session?.user;
+
+  if (user) {
+    $("auth").classList.add("hidden");
+    $("app").classList.remove("hidden");
+    $("userEmail").textContent = user.email;
+    loadPosts();
+  } else {
+    $("auth").classList.remove("hidden");
+    $("app").classList.add("hidden");
+  }
+}
+
+// SEKME DEĞİŞTİRME
+function showPage(id,button) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  $(id).classList.add("active");
+  button.classList.add("active");
+}
+
+// TOPLULUK GÖNDERİLERİ
+async function createPost() {
+  const title = $("postTitle").value.trim();
+  const content = $("postContent").value.trim();
+  const {data} = await db.auth.getUser();
+  const user = data.user;
+
+  if (!title || !content) {
+    $("postMessage").textContent = "Başlık ve içerik yazmalısın.";
+    return;
+  }
+  if (!user) return;
+
+  const {error} = await db.from("posts").insert({
+    title, content, user_id:user.id
+  });
+
+  $("postMessage").textContent = error ? error.message : "Gönderin paylaşıldı! 🎉";
+  if (!error) {
+    $("postTitle").value = "";
+    $("postContent").value = "";
+    loadPosts();
+  }
+}
+
+async function loadPosts() {
+  const {data,error} = await db.from("posts")
+    .select("id,title,content,created_at")
+    .order("created_at",{ascending:false});
+
+  if (error) {
+    $("posts").textContent = "Gönderiler yüklenemedi: " + error.message;
+    return;
   }
 
-  db.auth.onAuthStateChange(()=>{checkSession();});
-  checkSession();
+  $("posts").innerHTML = "";
+  if (!data.length) {
+    $("posts").textContent = "Henüz gönderi yok. İlk paylaşımı sen yap!";
+    return;
+  }
+
+  data.forEach(post=>{
+    const box = document.createElement("div");
+    box.className = "post";
+    const title = document.createElement("h3");
+    title.textContent = post.title;
+    const content = document.createElement("p");
+    content.textContent = post.content;
+    const date = document.createElement("small");
+    date.textContent = new Date(post.created_at).toLocaleString("tr-TR");
+    box.append(title,content,date);
+    $("posts").appendChild(box);
+  });
+}
+
+// KÜÇÜK KAYITLAR
+function getLocal(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+function putLocal(key,value) {
+  localStorage.setItem(key,JSON.stringify(value));
+}
+
+let steps = getLocal("kivilcim_steps",0);
+let water = getLocal("kivilcim_water",0);
+function updateCounters() {
+  $("stepCount").textContent = steps;
+  $("waterCount").textContent = water;
+}
+function changeSteps(amount) {
+  steps = Math.max(0,steps+amount);
+  putLocal("kivilcim_steps",steps);
+  updateCounters();
+}
+function changeWater(amount) {
+  water = Math.max(0,water+amount);
+  putLocal("kivilcim_water",water);
+  updateCounters();
+}
+
+// YEMEK GÜNLÜĞÜ
+let foods = getLocal("kivilcim_foods",[]);
+function renderFoods() {
+  $("foodList").innerHTML = "";
+  foods.forEach((f,i)=>{
+    const div = document.createElement("div");
+    div.className = "post";
+    const h = document.createElement("h3");
+    h.textContent = f.name;
+    const p = document.createElement("p");
+    p.textContent = f.note;
+    const b = document.createElement("button");
+    b.className = "danger";
+    b.textContent = "Sil";
+    b.onclick = ()=> {
+      foods.splice(i,1);
+      putLocal("kivilcim_foods",foods);
+      renderFoods();
+    };
+    div.append(h,p,b);
+    $("foodList").appendChild(div);
+  });
+}
+function saveFood() {
+  const name = $("foodName").value.trim();
+  const note = $("foodNote").value.trim();
+  if (!name) return;
+  foods.unshift({name,note});
+  putLocal("kivilcim_foods",foods);
+  $("foodName").value = "";
+  $("foodNote").value = "";
+  renderFoods();
+}
+
+// BİTKİLER
+let plants = getLocal("kivilcim_plants",[]);
+function renderPlants() {
+  $("plantList").innerHTML = "";
+  plants.forEach((p,i)=>{
+    const div = document.createElement("div");
+    div.className = "post";
+    const h = document.createElement("h3");
+    h.textContent = "🌿 " + p.name;
+    const note = document.createElement("p");
+    note.textContent = p.note;
+    const b = document.createElement("button");
+    b.className = "danger";
+    b.textContent = "Sil";
+    b.onclick = ()=>{
+      plants.splice(i,1);
+      putLocal("kivilcim_plants",plants);
+      renderPlants();
+    };
+    div.append(h,note,b);
+    $("plantList").appendChild(div);
+  });
+}
+function savePlant() {
+  const name = $("plantName").value.trim();
+  const note = $("plantNote").value.trim();
+  if (!name) return;
+  plants.unshift({name,note});
+  putLocal("kivilcim_plants",plants);
+  $("plantName").value = "";
+  $("plantNote").value = "";
+  renderPlants();
+}
+
+// ALIŞKANLIKLAR
+let habits = getLocal("kivilcim_habits",[]);
+function renderHabits() {
+  $("habitList").innerHTML = "";
+  habits.forEach((h,i)=>{
+    const div = document.createElement("div");
+    div.className = "post";
+    const label = document.createElement("label");
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = h.done;
+    check.style.width = "auto";
+    check.onchange = ()=>{
+      habits[i].done = check.checked;
+      putLocal("kivilcim_habits",habits);
+    };
+    label.append(check,document.createTextNode(" "+h.name));
+    const b = document.createElement("button");
+    b.className = "danger";
+    b.textContent = "Sil";
+    b.onclick = ()=>{
+      habits.splice(i,1);
+      putLocal("kivilcim_habits",habits);
+      renderHabits();
+    };
+    div.append(label,b);
+    $("habitList").appendChild(div);
+  });
+}
+function addHabit() {
+  const name = $("habitName").value.trim();
+  if (!name) return;
+  habits.push({name,done:false});
+  putLocal("kivilcim_habits",habits);
+  $("habitName").value = "";
+  renderHabits();
+}
+
+// KIVILCIM AI
+async function sendAI() {
+  const input = $("aiInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const bubble = document.createElement("div");
+  bubble.className = "ai-bubble";
+  bubble.textContent = "Sen: " + message;
+  $("chat").appendChild(bubble);
+  input.value = "";
+
+  $("aiStatus").textContent =
+    "AI bağlantısı henüz kurulmadı. Güvenli sunucu bağlantısı gerektiğinde burada etkinleştirilecek.";
+}
+
+// BAŞLANGIÇ
+updateCounters();
+renderFoods();
+renderPlants();
+renderHabits();
+checkUser();
+
 </script>
 </body>
 </html>
